@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const postcssPresetEnv = require('postcss-preset-env');
 
 
 module.exports = {
@@ -23,7 +22,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env']
+            presets: ['@babel/env']
           }
         }
       },
@@ -51,7 +50,7 @@ module.exports = {
               sourceMap: true,
               ident: 'postcss',
               plugins: () => [
-                postcssPresetEnv(/* options */)
+                require("autoprefixer")()
               ]
             }
           },
