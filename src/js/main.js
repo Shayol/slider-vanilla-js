@@ -8,6 +8,8 @@ import shuffleArray from "./shufflearray";
 
 window.addEventListener("load", () => {
 
+    window.URL = window.URL || window.webkitURL;
+
     let sliderR = document.querySelector(".slider--right");
     let sliderL = document.querySelector(".slider--left");
 
@@ -18,15 +20,7 @@ window.addEventListener("load", () => {
     let shuffleR = sliderR.querySelector(".slider__shuffle");
     let shuffleL = sliderL.querySelector(".slider__shuffle");
 
-    let addImg = document.querySelector("form.add-img");
-
-
-    // imgsR.forEach(img => {
-    //     img.addEventListener("load", () => {
-    //         img.style.opacity = "1";
-    //     });
-    // });
-
+    let input = document.querySelector(".input");
 
 
 
@@ -123,6 +117,12 @@ window.addEventListener("load", () => {
 
     shuffleR.addEventListener('click', () => shuffleArray(indexesR));
     shuffleL.addEventListener('click', () => shuffleArray(indexesL));
+
+    input.addEventListener("change", () => {
+        let src = window.URL.createObjectURL(input.files[0]);
+        console.log(src);
+        imgsWrapper.push(src);
+    })
 
     initR();
     initL();

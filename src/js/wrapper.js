@@ -21,7 +21,7 @@ export default function Wrapper(arr) {
 
     function notify() {
         subscribers.forEach(el => {
-            el.push(this.length() - 1);
+            el.push(list.length - 1);
         });
     }
 }
