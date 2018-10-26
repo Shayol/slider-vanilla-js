@@ -1,4 +1,9 @@
+import "@babel/polyfill";
 import "../scss/main.scss";
+
+import Wrapper from "./wrapper";
+import shuffleArray from "./shufflearray";
+
 
 
 window.addEventListener("load", () => {
@@ -10,33 +15,18 @@ window.addEventListener("load", () => {
     let imgsL = sliderL.querySelectorAll(".slider__img");
     let imgs = ["../img/image-1.jpg", "../img/image-2.jpg", "../img/image-3.jpg", "../img/image-4.jpg", "../img/image-5.jpg"];
 
-    function Wrapper(arr) {
-        let list = arr;
-        let subscribers = [];
+    let shuffleR = sliderR.querySelector(".slider__shuffle");
+    let shuffleL = sliderL.querySelector(".slider__shuffle");
 
-        this.push = function (img) {
-            list.push(img);
-            notify();
-        }
+    let addImg = document.querySelector("form.add-img");
 
-        this.subscribe = function (sub) {
-            subscribers.push(sub);
-        }
 
-        this.length = function () {
-            return list.length;
-        }
+    // imgsR.forEach(img => {
+    //     img.addEventListener("load", () => {
+    //         img.style.opacity = "1";
+    //     });
+    // });
 
-        this.getIndexes = function () {
-            return [...list.keys()];
-        }
-
-        function notify() {
-            subscribers.forEach(el => {
-                el.push(this.length() - 1);
-            });
-        }
-    }
 
 
 
@@ -44,24 +34,40 @@ window.addEventListener("load", () => {
 
         let k = 1;
 
-        setInterval(animation, 1500);
+        setTimeout(animation, 2500);
 
-        function animation() {
+        async function animation() {
             let n = k;
 
-            for (let i = 0, l = imgsR.length; i < l; i++ , n++) {
-
-                if (n >= indexesR.length) {
-                    n = 0;
-                }
-                imgsR[i].src = imgs[indexesR[n]];
+            for (let i = 0, l = imgsR.length; i < l; i++) {
+                imgsR[i].style.opacity = "0";
             }
+
+
+            await new Promise((resolve, reject) => {
+
+                setTimeout(() => {
+
+                    for (let i = 0, l = imgsR.length; i < l; i++ , n++) {
+                        if (n >= indexesR.length) {
+                            n = 0;
+                        }
+
+                        imgsR[i].style.backgroundImage = `url(${imgs[indexesR[n]]})`;
+                        imgsR[i].innerText = indexesR[n] + 1;
+                        imgsR[i].style.opacity = "1";
+                    }
+
+                    resolve();
+                }, 700);
+
+            });
 
             k++
             if (k >= indexesR.length) {
                 k = 0;
             }
-            ;
+            setTimeout(animation, 2500);
         }
     }
 
@@ -69,23 +75,38 @@ window.addEventListener("load", () => {
 
         let k = indexesL.length - 1;
 
-        setInterval(animation, 1500);
+        setTimeout(animation, 2500);
 
-        function animation() {
+        async function animation() {
             let n = k;
 
-            for (let i = 0, l = imgsL.length; i < l; i++ , n++) {
-
-                if (n >= indexesL.length) {
-                    n = 0;
-                }
-                imgsL[i].src = imgs[indexesL[n]];
+            for (let i = 0, l = imgsL.length; i < l; i++) {
+                imgsL[i].style.opacity = "0";
             }
+
+            await new Promise((resolve, reject) => {
+
+                setTimeout(() => {
+
+                    for (let i = 0, l = imgsL.length; i < l; i++ , n++) {
+                        if (n >= indexesL.length) {
+                            n = 0;
+                        }
+                        imgsL[i].style.backgroundImage = `url(${imgs[indexesL[n]]})`;
+                        imgsL[i].innerText = indexesL[n] + 1;
+                        imgsL[i].style.opacity = "1";
+                    }
+
+                    resolve();
+                }, 700);
+
+            });
 
             k--;
             if (k < 0) {
                 k = indexesL.length - 1;
             }
+            setTimeout(animation, 2500);
 
         }
     }
@@ -99,6 +120,9 @@ window.addEventListener("load", () => {
 
     let indexesL = imgsWrapper.getIndexes();
     imgsWrapper.subscribe(indexesL);
+
+    shuffleR.addEventListener('click', () => shuffleArray(indexesR));
+    shuffleL.addEventListener('click', () => shuffleArray(indexesL));
 
     initR();
     initL();
